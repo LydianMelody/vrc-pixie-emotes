@@ -45,7 +45,8 @@ A beautiful Python application by **LydianMelody** that converts GIF files to VR
 ### Prerequisites
 
 - Python 3.8 or higher
-- Windows, macOS, or Linux
+- Windows.
+- MacOS, & Linux are probably also compatible but *have not been tested.*
 
 ### Quick Setup
 
