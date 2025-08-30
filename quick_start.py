@@ -21,7 +21,7 @@ from src.utils.frame_reducer import FrameReducer
 
 
 def convert_gif(input_path, output_path=None, frames=None, fps=10, 
-                strategy='keep_ends', optimize_colors=True, max_colors=256):
+                strategy='none', optimize_colors=True, max_colors=256):
     """
     Convert a GIF to a VRChat sprite sheet.
     
@@ -30,7 +30,7 @@ def convert_gif(input_path, output_path=None, frames=None, fps=10,
         output_path: Path for output sprite sheet (optional)
         frames: Number of frames to include (optional)
         fps: Frames per second (default: 10)
-        strategy: Frame reduction strategy (default: 'keep_ends')
+        strategy: Frame reduction strategy (default: 'none')
         optimize_colors: Whether to optimize colors (default: True)
         max_colors: Maximum number of colors (default: 256)
     """
@@ -114,9 +114,9 @@ Examples:
     parser.add_argument('-o', '--output', help='Output sprite sheet path (optional)')
     parser.add_argument('-f', '--frames', type=int, help='Number of frames (1-64, default: all)')
     parser.add_argument('-r', '--fps', type=int, default=10, help='Frames per second (default: 10)')
-    parser.add_argument('-s', '--strategy', default='keep_ends', 
-                       choices=['keep_ends', 'uniform', 'smart', 'every_nth'],
-                       help='Frame reduction strategy (default: keep_ends)')
+    parser.add_argument('-s', '--strategy', default='none', 
+                       choices=['none', 'keep_ends', 'uniform', 'smart', 'every_nth'],
+                       help='Frame reduction strategy (default: none)')
     parser.add_argument('--no-optimize', action='store_true', 
                        help='Disable color optimization')
     parser.add_argument('-c', '--max-colors', type=int, default=256,

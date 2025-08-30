@@ -26,14 +26,15 @@ A beautiful Python application by **LydianMelody** that converts GIF files to VR
 
 ### 🖥️ User Interface
 
-- **Beautiful GUI**: Modern, intuitive interface with PIXIE branding
-- **Real-time Preview**: Live preview of original GIF and generated sprite sheet
+- **GUI**: It has one. I'll make it pretty later.
+- **Preview**: Live preview of original GIF and generated sprite sheet
 - **Interactive Controls**: Easy-to-use settings for frame count, FPS, and optimization
-- **Progress Feedback**: Clear status updates during processing
-- **File Browser**: Simple file selection with suggested filenames
+- **Progress Feedback**: Says when it's doing stuff. I'll add a progress bar later.
+- **File Browser**: Simple file selection with suggested filenames. I intend to add drag and drop.
 
 ### 🚀 Performance & Optimization
 
+- *I'm gonna assume the stuff below is true. Cursor wrote it I'm ngl.*
 - **Fast Processing**: Optimized algorithms for quick sprite sheet generation
 - **Memory Efficient**: Smart sampling and vectorized operations
 - **Color Optimization**: K-means clustering with fallback methods
@@ -128,7 +129,7 @@ PIXIE/
 
 ## 🎯 Frame Reduction Strategies
 
-- **keep_ends**: Preserves first and last frame (best for loops)
+- **none**: Unchanged frames
 - **uniform**: Reduces frames evenly across sequence
 - **smart**: Analyzes frame differences to keep key frames
 - **every_nth**: Takes every nth frame (e.g., every 2nd, 3rd frame)

@@ -30,7 +30,7 @@ class MainWindow:
         """
         self.root = root
         self.root.title("PIXIE — Pixel Image eXporter for Instant Emotes by LydianMelody")
-        self.root.geometry("1200x858")
+        self.root.geometry("1200x1070")
         self.root.minsize(1000, 600)
         
         # Initialize components
@@ -146,9 +146,9 @@ class MainWindow:
         
         # Frame reduction strategy
         ttk.Label(settings_frame, text="Reduction Strategy:").pack(anchor="w")
-        self.strategy_var = tk.StringVar(value="keep_ends")
+        self.strategy_var = tk.StringVar(value="none")
         strategy_combo = ttk.Combobox(settings_frame, textvariable=self.strategy_var, 
-                                    values=["keep_ends", "uniform", "smart", "every_nth"], 
+                                    values=["none", "keep_ends", "uniform", "smart", "every_nth"], 
                                     state="readonly")
         strategy_combo.pack(fill="x", pady=(0, 10))
         

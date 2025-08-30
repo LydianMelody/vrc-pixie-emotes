@@ -5,7 +5,7 @@
 ### 1. Install Dependencies
 
 ```bash
-pip install Pillow==10.1.0 imageio==2.33.0 numpy==1.24.3
+pip install -r requirements.txt
 ```
 
 ### 2. Run the Application

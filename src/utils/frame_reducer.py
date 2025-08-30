@@ -14,13 +14,14 @@ class FrameReducer:
     def __init__(self):
         """Initialize the frame reducer."""
         self.strategies = {
+            'none': self._reduce_none,
             'keep_ends': self._reduce_keep_ends,
             'uniform': self._reduce_uniform,
             'smart': self._reduce_smart,
             'every_nth': self._reduce_every_nth
         }
     
-    def reduce_frames(self, frames: List[Image.Image], target_count: int, strategy: str = 'keep_ends') -> List[Image.Image]:
+    def reduce_frames(self, frames: List[Image.Image], target_count: int, strategy: str = 'none') -> List[Image.Image]:
         """
         Reduce frames using the specified strategy.
         
@@ -39,6 +40,16 @@ class FrameReducer:
             raise ValueError(f"Unknown strategy: {strategy}")
         
         return self.strategies[strategy](frames, target_count)
+
+    def _reduce_none(self, frames: List[Image.Image], target_count: int) -> List[Image.Image]:
+        """
+        Default behavior: no special emphasis on endpoints; reduce uniformly if needed.
+        """
+        # If no reduction needed, return a copy
+        if target_count >= len(frames):
+            return frames.copy()
+        # Otherwise sample uniformly across the sequence
+        return self._reduce_uniform(frames, target_count)
     
     def _reduce_keep_ends(self, frames: List[Image.Image], target_count: int) -> List[Image.Image]:
         """
