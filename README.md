@@ -4,7 +4,7 @@ A beautiful Python application by **LydianMelody** that converts GIF files to VR
 
 ![PIXIE Logo](ui/PixieLogo.png)
 
-## ✨ What PIXIE does now
+## ✨ What PIXIE does
 
 ### 🎯 Core
 
@@ -121,8 +121,7 @@ PIXIE/
 
 ## 🎯 Frame reduction
 
-- **every_nth**: UI control for "keep R, drop 1" (e.g., 1→keep one, drop one)
-- **uniform / keep_ends**: Used internally when a precise target is required
+- **every_nth**: UI control for entering how often frames are dropped. "Drop every nth frame".
 
 ## 🔧 Technical Details
 
@@ -143,7 +142,7 @@ PIXIE/
 
 ## 🎵 About PIXIE
 
-**PIXIE** (Pixel Image eXport for Instant Emotes) was created by **LydianMelody** to help VRChat players easily convert GIF animations into compatible sprite sheets. The app now includes a modern web UI with playful brutalist styling and built‑in guidance for VRChat’s sprite sheet rules.
+**PIXIE** (Pixel Image eXport for Instant Emotes) was created by **LydianMelody** to help VRChat players easily convert GIF animations into compatible sprite sheets. The app now includes a modern web UI with playful neobrutalist styling and built‑in guidance for VRChat’s sprite sheet rules.
 
 ## 🤝 Contributing
 
