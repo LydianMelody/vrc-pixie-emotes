@@ -1,3 +1,18 @@
+# Virtual environments
+pixie-env/
+
+# Web temp outputs
+web/tmp/
+
+# Local reviews and notes
+CODE_REVIEW.md
+DEV_NOTES.md
+
+# OS / editor files
+*.DS_Store
+Thumbs.db
+.vscode/
+.idea/
 # Python
 __pycache__/
 *.py[cod]

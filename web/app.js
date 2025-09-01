@@ -96,23 +96,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Convert to base64
     let binary = ''; for (let i = 0; i < bytes.byteLength; i++) { binary += String.fromCharCode(bytes[i]); }
     const b64 = btoa(binary);
-    const info = await eel.import_gif_bytes(b64, file.name)();
-    await handleGifInfo(info);
+    try {
+      const info = await eel.import_gif_bytes(b64, file.name)();
+      await handleGifInfo(info);
+    } catch (err) { log(`Error: ${err}`); }
   });
 });
 
-$('#btn-browse').addEventListener('click', async () => {
+document.getElementById('btn-browse').addEventListener('click', () => {
   log('Opening file dialog…');
+  const input = document.getElementById('file-input');
+  if (input) input.click();
+});
+
+document.getElementById('file-input').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  if (!file.name.toLowerCase().endsWith('.gif')) { log('Please choose a .gif file'); return; }
   try {
-    const path = await eel.open_file_dialog()();
-    if (!path) return;
-    log(`Loading GIF: ${path}`);
-    const info = await eel.load_gif(path)();
+    const arrayBuffer = await file.arrayBuffer();
+    const bytes = new Uint8Array(arrayBuffer);
+    let binary = ''; for (let i = 0; i < bytes.byteLength; i++) { binary += String.fromCharCode(bytes[i]); }
+    const b64 = btoa(binary);
+    log(`Loading GIF: ${file.name}`);
+    const info = await eel.import_gif_bytes(b64, file.name)();
     await handleGifInfo(info);
-    log(`Frames: ${info.total_frames}, Size: ${info.original_dimensions[0]}x${info.original_dimensions[1]}`);
-  } catch (e) {
-    log(`Error: ${e}`);
-  }
+    if (info && info.total_frames) {
+      log(`Frames: ${info.total_frames}, Size: ${info.original_dimensions[0]}x${info.original_dimensions[1]}`);
+    }
+  } catch (err) { log(`Error: ${err}`); }
 });
 
 async function handleGifInfo(info) {

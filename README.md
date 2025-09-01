@@ -1,53 +1,49 @@
-# PIXIE — Pixel Image eXporter for Instant Emotes
+# PIXIE — Pixel Image eXport for Instant Emotes
 
-A beautiful Python application by **LydianMelody** that converts GIF files to VRChat-compatible sprite sheets with automatic optimization and frame management.
+A beautiful Python application by **LydianMelody** that converts GIF files to VRChat‑compatible sprite sheets with smart frame handling and color optimization.
 
 ![PIXIE Logo](ui/PixieLogo.png)
 
-## ✨ Features
+## ✨ What PIXIE does now
 
-### 🎯 Core Functionality
+### 🎯 Core
 
-- **GIF Processing**: Load and analyze GIF files with frame timing information
-- **Sprite Sheet Generation**: Create VRChat-compatible 1024x1024 sprite sheets
-- **Frame Management**: Intelligent frame reduction to fit VRChat limits (4, 16, or 64 frames)
-- **Color Optimization**: Reduce file size with intelligent color palette optimization
-- **Filename Parsing**: Extract frame count and FPS from filenames (e.g., "VRRatEmoji_14frames_20fps.png")
+- **GIF processing**: Loads frames and preserves per‑frame durations
+- **Sprite sheet generation**: Outputs VRChat‑ready 1024×1024 sheets
+- **Frame management**: "Remove every Nth" control (keep R, drop 1) plus uniform reduction when needed
+- **Color optimization**: Palette reduction to shrink file size while keeping quality
+- **Smart filenames**: Suggests names like `MyEmoji_14frames_20fps.png` using the **actual reduced frame count** and FPS
 
-### 🎨 VRChat Compatibility
+### 🎨 VRChat compatibility
 
-- **Grid Layouts**: Automatic selection of optimal grid arrangement
-  - 2x2 (512x512 frames) for up to 4 frames
-  - 4x4 (256x256 frames) for up to 16 frames  
-  - 8x8 (128x128 frames) for up to 64 frames
-- **Frame Arrangement**: Left-to-right, then top-to-bottom ordering
-- **Unused Frame Handling**: Proper handling of irregular frame counts
-- **VRChat Filename Format**: Automatic generation of compatible filenames
+- **Grid layouts** (auto‑selected):
+  - 2×2 (512×512 per frame) for up to 4 frames
+  - 4×4 (256×256 per frame) for up to 16 frames
+  - 8×8 (128×128 per frame) for up to 64 frames
+- **Ordering**: Frames placed left‑to‑right, then top‑to‑bottom
+- **Irregular counts**: Extra cells in the grid remain unused (hidden in VRChat)
 
-### 🖥️ User Interface
+### 🖥️ Web UI (Eel)
 
-- **GUI**: It has one. I'll make it pretty later.
-- **Preview**: Live preview of original GIF and generated sprite sheet
-- **Interactive Controls**: Easy-to-use settings for frame count, FPS, and optimization
-- **Progress Feedback**: Says when it's doing stuff. I'll add a progress bar later.
-- **File Browser**: Simple file selection with suggested filenames. I intend to add drag and drop.
+- **Tabs**: Original, Sprite, and Help & Info
+- **Drag & drop**: Drop a `.gif` onto the preview or click Browse
+- **Canvas player**: Accurate frame‑by‑frame preview with play/pause/stop
+- **Controls**: Remove‑every, FPS, Optimize colors, Max colors
+- **Help & Info**: Built‑in summary of VRChat sprite sheet rules and About
+- **Cute brutalist buttons**: Square edges, sheen hover, punchy shadows, reduced‑motion friendly
 
 ### 🚀 Performance & Optimization
 
-- *I'm gonna assume the stuff below is true. Cursor wrote it I'm ngl.*
-- **Fast Processing**: Optimized algorithms for quick sprite sheet generation
-- **Memory Efficient**: Smart sampling and vectorized operations
-- **Color Optimization**: K-means clustering with fallback methods
-- **Timeout Protection**: 30-second timeout prevents hanging on large files
-- **Error Recovery**: Graceful handling of optimization failures
+- **Fast**: Vectorized image operations and efficient sampling
+- **Memory‑friendly**: Works well with typical emote‑sized GIFs
+- **Graceful fallbacks**: Keeps going if an optimization step fails
 
 ## 🛠️ Installation
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- Windows.
-- MacOS, & Linux are probably also compatible but *have not been tested.*
+- Python 3.8+ (tested on Windows; macOS/Linux should work but are not fully tested)
+- A Chromium‑based browser (Chrome, Edge, Brave, etc). The app opens in your default browser; if no Chromium‑based browser is available, install one or configure `eel_app.py` with a specific `mode`.
 
 ### Quick Setup
 
@@ -69,53 +65,49 @@ A beautiful Python application by **LydianMelody** that converts GIF files to VR
 
 ## 🎮 Usage
 
-### GUI Application (Recommended)
+### Web UI (Recommended)
 
 ```bash
-# After installing via setup (pip), run:
-pixie
+# From the project root
+python eel_app.py
+```
 
-# Or run directly from source:
+By default, PIXIE opens in your system default browser. For most users this will be a Chromium‑based browser. If you need to force a browser, you can set the `mode` argument in `eel_app.py` (e.g., `mode="chrome"`, `mode="edge"`, or `mode="electron"`).
+
+**How to use:**
+
+- Browse or drag a `.gif` into the preview
+- Optionally set Remove‑every, FPS, and color limits
+- Click Generate Sprite → preview appears under the Sprite tab
+- Click Save PNG → a suggested filename is provided based on the loaded GIF and the actual reduced frame count and FPS
+
+### Classic desktop UI (Tkinter)
+
+```bash
 python main.py
 ```
 
-**Features:**
-
-- Load GIF files via file browser
-- Real-time preview of original and sprite sheet
-- Interactive frame navigation
-- Adjustable settings with live feedback
-- One-click sprite sheet generation and saving
-
-### Command Line Tool
+### Command line quick start
 
 ```bash
-# After installing via setup (pip), run:
-pixie-cli animation.gif -o output.png -f 16 -r 20
-
-# Or run directly from source:
 python quick_start.py animation.gif -o output.png -f 16 -r 20
 ```
-
-**Options:**
-
-- `-o, --output`: Output file path
-- `-f, --frames`: Number of frames (1-64)
-- `-r, --fps`: Frames per second
-- `-s, --strategy`: Frame reduction strategy
-- `--no-optimize`: Disable color optimization
-- `-c, --max-colors`: Maximum colors for optimization
 
 ## 📁 Project Structure
 
 ```text
 PIXIE/
-├── main.py                 # Main application entry point
+├── eel_app.py              # Web UI entry (Eel)
+├── web/                    # Web assets
+│   ├── index.html          # UI layout (tabs, preview, controls)
+│   ├── styles.css          # Styling (brutalist buttons, layout)
+│   └── app.js              # Client logic & Eel calls
+├── main.py                 # Classic desktop UI (Tkinter)
 ├── quick_start.py          # Command line interface
 ├── requirements.txt        # Python dependencies
 ├── README.md              # This file
 ├── ui/
-│   ├── main_window.py     # GUI implementation
+│   ├── main_window.py     # Tkinter implementation
 │   └── PixieLogo.png      # Application logo
 ├── src/
 │   ├── gif_processor.py   # GIF loading and frame extraction
@@ -127,12 +119,10 @@ PIXIE/
 └── examples/              # Sample files and documentation
 ```
 
-## 🎯 Frame Reduction Strategies
+## 🎯 Frame reduction
 
-- **none**: Unchanged frames
-- **uniform**: Reduces frames evenly across sequence
-- **smart**: Analyzes frame differences to keep key frames
-- **every_nth**: Takes every nth frame (e.g., every 2nd, 3rd frame)
+- **every_nth**: UI control for "keep R, drop 1" (e.g., 1→keep one, drop one)
+- **uniform / keep_ends**: Used internally when a precise target is required
 
 ## 🔧 Technical Details
 
@@ -141,7 +131,8 @@ PIXIE/
 - **Pillow (PIL)**: Image processing and manipulation
 - **imageio**: GIF loading and frame extraction
 - **numpy**: Numerical operations for color optimization
-- **tkinter**: GUI framework (included with Python)
+- **tkinter**: Classic desktop UI (included with Python)
+- **Eel**: Lightweight Python↔web bridge for the new web UI
 
 ### Performance Features
 
@@ -152,7 +143,7 @@ PIXIE/
 
 ## 🎵 About PIXIE
 
-**PIXIE** (Pixel Image eXporter for Instant Emotes) was created by **LydianMelody** to help VRChat players easily convert their GIF animations into compatible sprite sheets. The application combines powerful optimization algorithms with a beautiful, intuitive interface to make the process as smooth as possible.
+**PIXIE** (Pixel Image eXport for Instant Emotes) was created by **LydianMelody** to help VRChat players easily convert GIF animations into compatible sprite sheets. The app now includes a modern web UI with playful brutalist styling and built‑in guidance for VRChat’s sprite sheet rules.
 
 ## 📋 TODO
 
@@ -185,7 +176,7 @@ Attribution is appreciated; see `NOTICE` for guidance.
 
 ## 🎵 Support
 
-If you find PIXIE helpful, cool! Have a lovely day!
+If PIXIE helped you, awesome — have a lovely day!
 
 ---
 

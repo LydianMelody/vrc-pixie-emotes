@@ -12,6 +12,7 @@ import uuid
 
 import eel
 import shutil
+import atexit
 
 # Ensure project root (and thus `src`) is importable
 sys.path.insert(0, str(Path(__file__).parent))
@@ -27,6 +28,37 @@ PROJECT_ROOT = Path(__file__).parent
 WEB_DIR = PROJECT_ROOT / "web"
 TMP_DIR = WEB_DIR / "tmp"
 TMP_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def _safe_rmtree(path: Path):
+    try:
+        if path.exists():
+            shutil.rmtree(path, ignore_errors=True)
+    except Exception:
+        pass
+
+
+def _cleanup_tmp():
+    # Remove transient previews and frames; keep folder
+    try:
+        # Remove frames subfolders and known previews
+        frames_dir = TMP_DIR / "frames"
+        _safe_rmtree(frames_dir)
+        for name in ("original_preview.gif", "preview.png", "sheet_preview.jpg"):
+            try:
+                p = TMP_DIR / name
+                if p.exists():
+                    p.unlink()
+            except Exception:
+                pass
+        # Recreate frames dir for next run
+        (TMP_DIR / "frames").mkdir(parents=True, exist_ok=True)
+    except Exception:
+        pass
+
+
+# Clean temp on process exit
+atexit.register(_cleanup_tmp)
 
 
 class AppState:
@@ -144,9 +176,21 @@ def load_gif(path: str):
 def import_gif_bytes(b64: str, filename: str):
     """Accept a GIF from the browser via base64, write to tmp, and load it."""
     safe_name = Path(filename).name
+    # Force .gif extension to avoid serving unexpected content types
+    if not safe_name.lower().endswith('.gif'):
+        safe_name = f"{Path(safe_name).stem}.gif"
     target = TMP_DIR / safe_name
-    data = base64.b64decode(b64)
-    target.write_bytes(data)
+    try:
+        data = base64.b64decode(b64, validate=True)
+    except Exception:
+        return {"message": "Invalid upload data"}
+    # Basic signature check for GIF (GIF87a or GIF89a)
+    if not (len(data) >= 6 and (data[:6] in (b"GIF87a", b"GIF89a"))):
+        return {"message": "Not a GIF file"}
+    try:
+        target.write_bytes(data)
+    except Exception as e:
+        return {"message": f"Failed to write temp file: {e}"}
     return load_gif(str(target))
 
 
@@ -261,11 +305,23 @@ def main():
         except Exception:
             pass
 
+    # Clean tmp at startup
+    _cleanup_tmp()
+
     eel.init(str(WEB_DIR))
-    eel.start("index.html", size=(1200, 900), mode="edge")
+    # Let Eel choose the available/default browser (no forced mode)
+    eel.start("index.html", size=(1200, 900))
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        # Ensure cleanup then exit
+        try:
+            _cleanup_tmp()
+        except Exception:
+            pass
+        raise
 
 
