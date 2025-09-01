@@ -145,26 +145,6 @@ PIXIE/
 
 **PIXIE** (Pixel Image eXport for Instant Emotes) was created by **LydianMelody** to help VRChat players easily convert GIF animations into compatible sprite sheets. The app now includes a modern web UI with playful brutalist styling and built‑in guidance for VRChat’s sprite sheet rules.
 
-## 📋 TODO
-
-### 🎨 UI/UX Improvements
-
-- [ ] **Responsive Design**: Make the interface adapt to different window sizes
-- [ ] **Beautiful UI**: Enhance visual design with modern styling and animations
-- [ ] **Dark Mode**: Add optional dark theme for better accessibility
-- [ ] **Custom Themes**: Allow users to customize the interface appearance
-- [ ] **Better Typography**: Improve font choices and text hierarchy
-- [ ] **Smooth Animations**: Add subtle animations for better user experience
-- [ ] **Accessibility**: Improve keyboard navigation and screen reader support
-
-### 🔧 Technical Enhancements
-
-- [ ] **Batch Processing**: Process multiple GIFs at once
-- [ ] **Preset Management**: Save and load custom settings
-- [ ] **Export Formats**: Support additional output formats
-- [ ] **Advanced Preview**: Zoom and pan capabilities for sprite sheet preview
-- [ ] **Undo/Redo**: Add history management for settings changes
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests.
