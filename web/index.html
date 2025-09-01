@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PIXIE — Pixel Image eXport for Instant Emotes</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="app__header">
+      <img class="logo-img" src="assets/PixieLogo.png" alt="Pixie logo" />
+      <div class="title">PIXIE — Pixel Image eXport for Instant Emotes</div>
+    </div>
+
+    <div class="layout">
+      <div class="panel panel--preview">
+        <div class="tabs">
+          <div class="tab tab--active" data-tab="original">Original</div>
+          <div class="tab" data-tab="sprite">Sprite</div>
+          <div class="tab" data-tab="help">Help &amp; Info</div>
+        </div>
+
+        <div id="preview-area" class="preview" data-tip="Drop a .gif here or click Browse">
+          <canvas id="checker" class="checker"></canvas>
+          <img id="preview-image" alt="" />
+          <canvas id="player" class="player-canvas"></canvas>
+          <div id="placeholder" class="placeholder">
+            <div class="placeholder__icon">✨</div>
+            <div>Drop a .gif here or click Browse</div>
+          </div>
+        </div>
+
+        <div id="help" class="help" hidden>
+          <h3>How to use</h3>
+          <ul>
+            <li>Click Browse or drag a .gif into the preview.</li>
+            <li>Use Remove-every to evenly skip frames and reduce length.</li>
+            <li>Optionally set Target frame count and FPS.</li>
+            <li>Click Generate Sprite, then Save PNG.</li>
+          </ul>
+
+          <h3>VRChat sprite sheet basics</h3>
+          <p>VRChat expects a 1024×1024 sprite sheet made of square frames arranged in a uniform grid. Frames are read left-to-right, then top-to-bottom.</p>
+          <ul>
+            <li>2×2 grid — 512×512 per frame — up to 4 frames</li>
+            <li>4×4 grid — 256×256 per frame — up to 16 frames</li>
+            <li>8×8 grid — 128×128 per frame — up to 64 frames</li>
+          </ul>
+          <p>In VRChat you choose the number of frames and the FPS (frames/sec). The grid size is implied by the frame count: 4 or fewer → 512px cells; 16 or fewer → 256px; otherwise → 128px. If your animation has an irregular count (e.g., 17), you must still use a valid grid (e.g., 8×8); any extra cells are ignored.</p>
+          <p>You can set defaults in the filename for easy sharing, e.g. <code>VRRatEmoji_14frames_20fps.png</code>. The frame count must be between 1 and 64.</p>
+
+          <h3>About</h3>
+          <p><strong>PIXIE</strong> — Pixel Image eXporter for Instant Emotes — by <strong>LydianMelody</strong>. Converts GIFs into VRChat-ready sprite sheets with smart frame reduction and color optimization.</p>
+        </div>
+
+        <div class="player">
+          <button id="btn-play" class="icon-btn" title="Play">▶</button>
+          <button id="btn-stop" class="icon-btn" title="Stop">⏹</button>
+        </div>
+      </div>
+
+      <div class="panel panel--controls">
+        <div class="stack">
+          <div class="row">
+            <button id="btn-browse" class="cta">Browse GIF…</button>
+            <span class="pixie-mark"></span>
+          </div>
+          <div class="row">
+            <label class="label" for="removeEvery">Remove every Nth frame</label>
+            <input id="removeEvery" class="input" type="number" min="0" value="0" data-tip="0 keeps all frames; 1 keeps 1, drops 1; 2 keeps 2, drops 1" />
+          </div>
+          
+          <div class="row">
+            <label class="label" for="fps">FPS</label>
+            <input id="fps" class="input" type="number" min="1" value="10" />
+          </div>
+          <div class="row">
+            <label class="label" for="optimize">Color optimization</label>
+            <input id="optimize" type="checkbox" checked />
+          </div>
+          <div class="row">
+            <label class="label" for="maxColors">Max colors</label>
+            <input id="maxColors" class="input" type="number" min="2" max="256" value="256" />
+          </div>
+          <div class="row">
+            <button id="btn-generate" class="pill">Generate Sprite</button>
+            <button id="btn-save" class="pill">Save PNG</button>
+          </div>
+        </div>
+
+        <div class="log">
+          <div class="log__title">Log</div>
+          <pre id="log"></pre>
+          <div class="log__title">Tips</div>
+          <pre id="tips"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="/eel.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+  
+</body>
+</html>
+
+

@@ -16,12 +16,13 @@ class FrameReducer:
         self.strategies = {
             'none': self._reduce_none,
             'keep_ends': self._reduce_keep_ends,
-            'uniform': self._reduce_uniform,
+            # 'uniform' intentionally not exposed; equivalent to every_nth-derived sampling
+            # 'smart' removed from UI; retained for backward compat but maps to keep_ends
             'smart': self._reduce_smart,
             'every_nth': self._reduce_every_nth
         }
     
-    def reduce_frames(self, frames: List[Image.Image], target_count: int, strategy: str = 'none') -> List[Image.Image]:
+    def reduce_frames(self, frames: List[Image.Image], target_count: int, strategy: str = 'none', nth: int | None = None) -> List[Image.Image]:
         """
         Reduce frames using the specified strategy.
         
@@ -39,6 +40,8 @@ class FrameReducer:
         if strategy not in self.strategies:
             raise ValueError(f"Unknown strategy: {strategy}")
         
+        if strategy == 'every_nth':
+            return self._reduce_every_nth(frames, target_count, nth=nth)
         return self.strategies[strategy](frames, target_count)
 
     def _reduce_none(self, frames: List[Image.Image], target_count: int) -> List[Image.Image]:
@@ -118,11 +121,10 @@ class FrameReducer:
         if target_count >= len(frames):
             return frames.copy()
         
-        # For now, use keep_ends strategy as it's most effective for loops
-        # In the future, this could analyze frame differences to keep important frames
+        # Currently aliases to keep_ends to maintain backward compatibility.
         return self._reduce_keep_ends(frames, target_count)
     
-    def _reduce_every_nth(self, frames: List[Image.Image], target_count: int) -> List[Image.Image]:
+    def _reduce_every_nth(self, frames: List[Image.Image], target_count: int, nth: int | None = None) -> List[Image.Image]:
         """
         Reduce frames by taking every nth frame.
         
@@ -133,13 +135,13 @@ class FrameReducer:
         Returns:
             List of reduced frames
         """
-        if target_count >= len(frames):
+        # If explicit nth is provided and >1, we must reduce even if target_count == len(frames)
+        if (not nth or nth <= 1) and target_count >= len(frames):
             return frames.copy()
         
-        # Calculate nth value
-        nth = len(frames) // target_count
-        if nth < 1:
-            nth = 1
+        # Calculate nth value: either provided explicitly or derived from target count
+        if not nth or nth < 1:
+            nth = max(1, len(frames) // max(1, target_count))
         
         reduced_frames = []
         for i in range(0, len(frames), nth):
@@ -148,6 +150,25 @@ class FrameReducer:
             reduced_frames.append(frames[i])
         
         return reduced_frames
+
+    def remove_every(self, frames: List[Image.Image], keep_r: int) -> List[Image.Image]:
+        """
+        Keep R frames, then drop 1, repeating. If keep_r <= 0, returns a copy (no removal).
+
+        Example:
+            keep_r=1 → keep 1, drop 1 (every other frame kept)
+            keep_r=2 → keep 2, drop 1 (K,K,D, K,K,D, ...)
+        """
+        if keep_r <= 0:
+            return frames.copy()
+        result: List[Image.Image] = []
+        cycle = keep_r + 1
+        for i, frame in enumerate(frames):
+            if (i % cycle) < keep_r:
+                result.append(frame)
+        if not result:
+            return frames[:1]
+        return result
     
     def get_reduction_suggestions(self, frame_count: int) -> List[Dict[str, Any]]:
         """
