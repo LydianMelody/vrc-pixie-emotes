@@ -10,9 +10,9 @@ A beautiful Python application by **LydianMelody** that converts GIF files to VR
 
 - **GIF processing**: Loads frames and preserves per‑frame durations
 - **Sprite sheet generation**: Outputs VRChat‑ready 1024×1024 sheets
-- **Frame management**: "Remove every Nth" control (keep R, drop 1) plus uniform reduction when needed
+- **Frame management**: "Remove every Nth" removes every nth frame or keep them all.
 - **Color optimization**: Palette reduction to shrink file size while keeping quality
-- **Smart filenames**: Suggests names like `MyEmoji_14frames_20fps.png` using the **actual reduced frame count** and FPS
+- **Smart filenames**: Suggests names like `MyEmoji_14frames_20fps.png` using the actual frame count and fps.
 
 ### 🎨 VRChat compatibility
 
